@@ -1,4 +1,5 @@
 /target/
-/.project/
-/.classpass/
-/.settings/
+/.settings
+*.classpass
+*.project
+
