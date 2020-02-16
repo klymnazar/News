@@ -51,32 +51,27 @@ public class NewsProcessor {
 
 				String type = scanner.nextLine();
 
-				// All news
 				if (type.equals("1")) {
-					showAllNews(type);
-				} else
 
-				// Compare News by topic
-				if (type.equals("2")) {
+					showAllNews(type);
+
+				} else if (type.equals("2")) {
+
 					showNewsByTopic(scanner);
 
-				} else
+				} else if (type.equals("3")) {
 
-				// Compare News by date
-				if (type.equals("3")) {
 					showNewsByDate(type);
 
-				} else
+				} else if (type.equals("4")) {
 
-				// Compare News by popularity
-				if (type.equals("4")) {
 					showNewsByPopularity(type);
 
-				} else
+				} else if (type.equals("5")) {
 
-				if (type.equals("5")) {
 					System.out.println("Exit...");
 					System.exit(0);
+
 				}
 
 			}
