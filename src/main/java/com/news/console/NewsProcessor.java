@@ -18,6 +18,8 @@ public class NewsProcessor {
 
 	private List<News> newsList;
 
+	private List<News> newsSortedList = new ArrayList<News>();
+
 	private HashMap<String, String> sortingType = new HashMap<>();
 
 	public NewsProcessor() throws ParseException {
@@ -37,8 +39,6 @@ public class NewsProcessor {
 
 	public void scanConsol() {
 
-		List<News> newsSortedList = new ArrayList<News>();
-
 		System.out.println("Enter the news sorting type:");
 		System.out.println("1 - all");
 		System.out.println("2 - topic");
@@ -46,66 +46,33 @@ public class NewsProcessor {
 		System.out.println("4 - popularity");
 		System.out.println("5 - exit");
 
-		try (Scanner scaner = new Scanner(System.in)) {
-			while (scaner.hasNext()) {
+		try (Scanner scanner = new Scanner(System.in)) {
+			while (scanner.hasNext()) {
 
-				String type = scaner.nextLine();
+				String type = scanner.nextLine();
 
 				// All news
 				if (type.equals("1")) {
-					printNewsFromList(newsList, newsList, type);
-				}
+					showAllNews(type);
+				} else
 
 				// Compare News by topic
 				if (type.equals("2")) {
+					showNewsByTopic(scanner);
 
-					System.out.println("Enter news topic:");
-					System.out.println("a - sport");
-					System.out.println("b - media");
-					System.out.println("c - social");
-					System.out.println("d - politic");
-
-					String typeT = scaner.nextLine();
-
-					newsSortedList = newsList.stream()
-							.filter(news -> news.getTopic().equals(" - " + sortingType.get(typeT) + " - "))
-							.collect(Collectors.toList());
-
-					printNewsFromList(newsList, newsSortedList, typeT);
-				}
+				} else
 
 				// Compare News by date
 				if (type.equals("3")) {
+					showNewsByDate(type);
 
-					newsSortedList.addAll(newsList);
-
-					newsSortedList = newsList.stream()
-							.sorted((News n1, News n2) -> n1.getDate().compareTo(n2.getDate()))
-							.collect(Collectors.toList());
-
-					printNewsFromList(newsList, newsSortedList, type);
-				}
+				} else
 
 				// Compare News by popularity
 				if (type.equals("4")) {
+					showNewsByPopularity(type);
 
-					System.out.println("Sort by popularity:");
-
-					newsSortedList.addAll(newsList);
-
-					newsSortedList = newsList.stream()
-							.sorted((News n1, News n2) -> n2.getDate().compareTo(n1.getDate()))
-							.sorted((News n1, News n2) -> n2.getCounter().compareTo(n1.getCounter()))
-							.collect(Collectors.toList());
-
-					for (int i = 0; i < CACHE_CAPACITY; i++) {
-
-						News news = newsSortedList.get(i);
-
-						System.out.println(news.getDate().format(formatter) + " " + news.getTopic() + " "
-								+ news.getText() + " " + news.getCounter());
-					}
-				}
+				} else
 
 				if (type.equals("5")) {
 					System.out.println("Exit...");
@@ -130,6 +97,58 @@ public class NewsProcessor {
 					+ news.getCounter());
 		}
 
+	}
+
+	public void showAllNews(String type) {
+
+		printNewsFromList(newsList, newsList, type);
+
+	}
+
+	public void showNewsByTopic(Scanner scanner) {
+
+		System.out.println("Enter news topic:");
+		System.out.println("a - sport");
+		System.out.println("b - media");
+		System.out.println("c - social");
+		System.out.println("d - politic");
+
+		String typeT = scanner.nextLine();
+
+		newsSortedList = newsList.stream()
+				.filter(news -> news.getTopic().equals(" - " + sortingType.get(typeT) + " - "))
+				.collect(Collectors.toList());
+
+		printNewsFromList(newsList, newsSortedList, typeT);
+
+	}
+
+	public void showNewsByDate(String type) {
+
+		newsSortedList.addAll(newsList);
+
+		newsSortedList = newsList.stream().sorted((News n1, News n2) -> n1.getDate().compareTo(n2.getDate()))
+				.collect(Collectors.toList());
+
+		printNewsFromList(newsList, newsSortedList, type);
+
+	}
+
+	public void showNewsByPopularity(String type) {
+
+		System.out.println("Sort by popularity:");
+
+		newsSortedList.addAll(newsList);
+
+		newsSortedList = newsList.stream().sorted((News n1, News n2) -> n2.getDate().compareTo(n1.getDate()))
+				.sorted((News n1, News n2) -> n2.getCounter().compareTo(n1.getCounter())).limit(CACHE_CAPACITY)
+				.collect(Collectors.toList());
+
+		for (News news : newsSortedList) {
+
+			System.out.println(news.getDate().format(formatter) + " " + news.getTopic() + " " + news.getText() + " "
+					+ news.getCounter());
+		}
 	}
 
 }
