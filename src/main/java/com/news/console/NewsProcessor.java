@@ -52,26 +52,16 @@ public class NewsProcessor {
 				String type = scanner.nextLine();
 
 				if (type.equals("1")) {
-
 					showAllNews(type);
-
 				} else if (type.equals("2")) {
-
 					showNewsByTopic(scanner);
-
 				} else if (type.equals("3")) {
-
 					showNewsByDate(type);
-
 				} else if (type.equals("4")) {
-
 					showNewsByPopularity(type);
-
 				} else if (type.equals("5")) {
-
 					System.out.println("Exit...");
 					System.exit(0);
-
 				}
 
 			}
@@ -95,13 +85,10 @@ public class NewsProcessor {
 	}
 
 	public void showAllNews(String type) {
-
 		printNewsFromList(newsList, newsList, type);
-
 	}
 
 	public void showNewsByTopic(Scanner scanner) {
-
 		System.out.println("Enter news topic:");
 		System.out.println("a - sport");
 		System.out.println("b - media");
@@ -115,22 +102,18 @@ public class NewsProcessor {
 				.collect(Collectors.toList());
 
 		printNewsFromList(newsList, newsSortedList, typeT);
-
 	}
 
 	public void showNewsByDate(String type) {
-
 		newsSortedList.addAll(newsList);
 
 		newsSortedList = newsList.stream().sorted((News n1, News n2) -> n1.getDate().compareTo(n2.getDate()))
 				.collect(Collectors.toList());
 
 		printNewsFromList(newsList, newsSortedList, type);
-
 	}
 
 	public void showNewsByPopularity(String type) {
-
 		System.out.println("Sort by popularity:");
 
 		newsSortedList.addAll(newsList);
